@@ -145,6 +145,15 @@ declare module '@ruvector/core' {
   export default core;
 }
 
+// ZS patch: stub for @ruvector/sona — package ships no JS without prebuilt
+// native binary, but the CLI imports it dynamically inside a try/catch so a
+// build-time stub is enough to satisfy tsc.
+declare module '@ruvector/sona' {
+  const sona: any;
+  export default sona;
+  export class SonaEngine { constructor(...args: any[]); }
+}
+
 declare module '@ruvector/rvagent-wasm' {
   /** Initialize the WASM module (browser — uses fetch for .wasm file). */
   export default function init(): Promise<void>;
