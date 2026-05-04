@@ -72,7 +72,8 @@ async function testProviderConnectivity(
 ): Promise<{ ok: boolean; reason: string }> {
   const endpoints: Record<string, { url: string; headers: Record<string, string> }> = {
     anthropic: {
-      url: 'https://api.anthropic.com/v1/models',
+      // ZS patch: honor ANTHROPIC_BASE_URL so connectivity tests work with zs-anthropic-proxy.
+      url: `${(process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com/v1').replace(/\/+$/, '')}/models`,
       headers: {
         'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',

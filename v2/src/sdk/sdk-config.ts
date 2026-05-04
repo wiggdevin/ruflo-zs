@@ -34,7 +34,8 @@ export class ClaudeFlowSDKAdapter {
   constructor(config: SDKConfiguration = {}) {
     this.config = {
       apiKey: config.apiKey || process.env.ANTHROPIC_API_KEY || process.env.CLAUDE_API_KEY,
-      baseURL: config.baseURL,
+      // ZS patch: honor ANTHROPIC_BASE_URL env for zs-anthropic-proxy redirection.
+      baseURL: config.baseURL || process.env.ANTHROPIC_BASE_URL,
       maxRetries: config.maxRetries || 3,
       timeout: config.timeout || 60000,
       defaultHeaders: config.defaultHeaders || {},

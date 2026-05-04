@@ -114,7 +114,9 @@ export async function callAnthropicMessages(input: AnthropicCallInput): Promise<
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), input.timeoutMs || 60000);
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    // ZS patch: honor ANTHROPIC_BASE_URL so this can route via zs-anthropic-proxy.
+    const anthropicBase = (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com/v1').replace(/\/+$/, '');
+    const res = await fetch(`${anthropicBase}/messages`, {
       method: 'POST',
       headers: {
         'x-api-key': anthropicKey,
@@ -342,7 +344,9 @@ export async function executeAgentTask(input: AgentExecuteInput): Promise<AgentE
     const timeoutMs = input.timeoutMs || 60000;
     const timer = setTimeout(() => controller.abort(), timeoutMs);
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    // ZS patch: honor ANTHROPIC_BASE_URL so this can route via zs-anthropic-proxy.
+    const anthropicBase = (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com/v1').replace(/\/+$/, '');
+    const res = await fetch(`${anthropicBase}/messages`, {
       method: 'POST',
       headers: {
         'x-api-key': apiKey,

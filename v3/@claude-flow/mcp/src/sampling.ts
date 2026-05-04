@@ -321,7 +321,9 @@ export function createAnthropicProvider(apiKey: string): LLMProvider {
   return {
     name: 'anthropic',
     async createMessage(request: CreateMessageRequest): Promise<CreateMessageResult> {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      // ZS patch: honor ANTHROPIC_BASE_URL so this can route via zs-anthropic-proxy.
+      const anthropicBase = (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com/v1').replace(/\/+$/, '');
+      const response = await fetch(`${anthropicBase}/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

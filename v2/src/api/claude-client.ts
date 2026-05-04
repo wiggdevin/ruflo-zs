@@ -304,7 +304,7 @@ export class ClaudeAPIClient extends EventEmitter {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), this.config.timeout || 30000);
 
-        const response = await fetch(this.config.apiUrl || 'https://api.anthropic.com/v1/messages', {
+        const response = await fetch(this.config.apiUrl || process.env.ANTHROPIC_BASE_URL_MESSAGES || (process.env.ANTHROPIC_BASE_URL ? `${process.env.ANTHROPIC_BASE_URL.replace(/\/+$/, '')}/messages` : 'https://api.anthropic.com/v1/messages'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -378,7 +378,7 @@ export class ClaudeAPIClient extends EventEmitter {
     const timeout = setTimeout(() => controller.abort(), (this.config.timeout || 30000) * 2); // Double timeout for streaming
 
     try {
-      const response = await fetch(this.config.apiUrl || 'https://api.anthropic.com/v1/messages', {
+      const response = await fetch(this.config.apiUrl || process.env.ANTHROPIC_BASE_URL_MESSAGES || (process.env.ANTHROPIC_BASE_URL ? `${process.env.ANTHROPIC_BASE_URL.replace(/\/+$/, '')}/messages` : 'https://api.anthropic.com/v1/messages'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

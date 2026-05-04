@@ -132,7 +132,12 @@ export class AnthropicProvider extends BaseProvider {
       throw new AuthenticationError('Anthropic API key is required', 'anthropic');
     }
 
-    this.baseUrl = this.config.apiUrl || 'https://api.anthropic.com/v1';
+    // ZS patch: honor ANTHROPIC_BASE_URL env so traffic can be redirected
+    // through zs-anthropic-proxy → Claude Max subscription with no per-token billing.
+    this.baseUrl =
+      this.config.apiUrl ||
+      process.env.ANTHROPIC_BASE_URL ||
+      'https://api.anthropic.com/v1';
     this.headers = {
       'x-api-key': this.config.apiKey,
       'anthropic-version': '2023-06-01',
